@@ -7,13 +7,13 @@ import { Platform } from "react-native";
 
 // TODO: Replace with your Firebase config
 const firebaseConfig = {
-    apiKey: "AIzaSyCDK5p27p0PvVLAThNkP__oE0dmtb9Ryd0",
-    authDomain: "react-native-app-58d0e.firebaseapp.com",
-    projectId: "react-native-app-58d0e",
-    storageBucket: "react-native-app-58d0e.firebasestorage.app",
-    messagingSenderId: "769611697598",
-    appId: "1:769611697598:web:140664135b3e73ec0b3def",
-    measurementId: "G-VLCNE5GB8M"
+    apiKey: "AIzaSyCeK6Zfn-d1bn7sBY7UMSuUtPA849NTEqQ",
+    authDomain: "react-native-app-909c5.firebaseapp.com",
+    projectId: "react-native-app-909c5",
+    storageBucket: "react-native-app-909c5.firebasestorage.app",
+    messagingSenderId: "415281564190",
+    appId: "1:415281564190:web:a2295f814b2277abf13c0f",
+    measurementId: "G-J0LY5C81GG"
 };
 
 import { FirebaseApp } from "firebase/app";

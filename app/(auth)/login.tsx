@@ -33,12 +33,6 @@ export default function Login() {
         androidClientId: '769611697598-oiattim9t34gonr6p9e10360r4c6e8vn.apps.googleusercontent.com',
     });
 
-    useEffect(() => {
-        if (request) {
-            console.log("Current Redirect URI:", request.redirectUri);
-        }
-    }, [request]);
-
     const showModal = (type: 'success' | 'error', title: string, message: string) => {
         setModalConfig({ type, title, message });
         setModalVisible(true);
@@ -112,7 +106,7 @@ export default function Login() {
                         <View style={styles.logoContainer}>
                             <Image source={require('../../assets/adaptive-icon.png')} style={styles.logo} resizeMode="contain" />
                         </View>
-                        <Text style={styles.appName}>MCQ Master</Text>
+                        <Text style={styles.appName}>Quiz Flow</Text>
                         <Text style={styles.title}>Welcome Back!</Text>
                         <Text style={styles.subtitle}>Sign in to continue your progress</Text>
                     </Animated.View>

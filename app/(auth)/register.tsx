@@ -81,7 +81,7 @@ export default function Register() {
                         <View style={styles.logoContainer}>
                             <Image source={require('../../assets/adaptive-icon.png')} style={styles.logo} resizeMode="contain" />
                         </View>
-                        <Text style={styles.appName}>MCQ Master</Text>
+                        <Text style={styles.appName}>Quiz Flow</Text>
                         <Text style={styles.title}>Create Account</Text>
                         <Text style={styles.subtitle}>Start your learning journey today</Text>
                     </Animated.View>

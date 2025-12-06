@@ -5,6 +5,7 @@ import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from '../../services/firebaseConfig';
 import { Trophy, Medal } from 'lucide-react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { useAuth } from '../../context/AuthContext';
 
 interface UserRank {
     id: string;
@@ -16,6 +17,8 @@ export default function Leaderboard() {
     const [users, setUsers] = useState<UserRank[]>([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
+    const { user } = useAuth()
+    console.log(user)
 
     const fetchLeaderboard = async () => {
         try {
@@ -66,7 +69,7 @@ export default function Leaderboard() {
                     <View style={styles.avatar}>
                         <Text style={styles.avatarText}>{item.displayName[0]}</Text>
                     </View>
-                    <Text style={styles.name}>{item.displayName}</Text>
+                    <Text style={styles.name}>{item.displayName} {item.id === user?.uid && '(You)'}</Text>
                 </View>
                 <Text style={styles.xp}>{item.xp} XP</Text>
             </Animated.View>

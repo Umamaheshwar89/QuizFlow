@@ -5,12 +5,11 @@ import { useAuth } from '../../context/AuthContext';
 import { useUserProfile } from '../../hooks/useUserProfile';
 import { Zap, Trophy, Target, ChevronRight, CloudCog } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { useCategories } from '../../hooks/useCategories';
 import CustomLoader from '../../components/CustomLoader';
-import { seedDatabase } from '../../utils/seedFirestore';
 
 export default function Home() {
     const { user } = useAuth();
@@ -105,16 +104,21 @@ export default function Home() {
                     />
                 }
             >
-
                 {/* Header */}
                 <Animated.View entering={FadeInDown.delay(100).duration(800)} style={styles.header}>
                     <View>
                         <Text style={styles.greeting}>Hello,</Text>
                         <Text style={styles.username}>{profile?.displayName || user?.displayName || user?.email?.split('@')[0] || 'Learner'}</Text>
                     </View>
-                    <View style={styles.avatarContainer}>
-                        <Text style={styles.avatarText}>{profile?.displayName?.[0] || user?.displayName?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}</Text>
-                    </View>
+                    <Link href={"/profile"} style={styles.avatarContainer}>
+                        {
+                            profile?.photoURL ?
+                                <Image source={{ uri: profile?.photoURL }} style={styles.avatar} />
+                                :
+                                <Text style={styles.avatarText}>{profile?.displayName?.[0] || user?.displayName?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}
+                                </Text>
+                        }
+                    </Link>
                 </Animated.View>
 
                 {/* Stats Cards */}
@@ -335,5 +339,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 10,
         textAlign: 'center',
-    }
+    },
+    avatar: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+    },
 });

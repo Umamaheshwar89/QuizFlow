@@ -95,16 +95,7 @@ export default function EditProfile() {
             });
 
             showModal('success', 'Success', 'Profile updated successfully');
-            // router.back(); // Move this to modal close or delay? 
-            // Actually usually we want the user to see success before leaving.
-            // But strict replacement of Alert: Alert usually blocks? No, RN Alert is async/callback based.
-            // Here distinct from Alert, CustomModal is in-component. 
-            // Let's delay back navigation or let user close modal to go back.
-            // For now, I'll keep router.back() but maybe wrapped in a timeout or just remove it and let user press a button?
-            // The original code had: Alert.alert(...) then router.back() (which might happen immediately if not awaited properly, but Alert.alert returns void).
-            // Alert.alert is non-blocking in JS thread but shows native dialog.
-            // If I showModal, I shouldn't route back immediately or modal disappears.
-            // I'll set a flag or handle navigation on modal close.
+            router.back();
         } catch (error: any) {
             showModal('error', 'Error', error.message);
         } finally {
