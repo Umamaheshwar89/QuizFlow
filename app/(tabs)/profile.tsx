@@ -77,10 +77,6 @@ export default function Profile() {
                         <Settings size={24} color="#333" />
                         <Text style={styles.menuText}>Settings</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/admin/users')}>
-                        <Users size={24} color="#333" />
-                        <Text style={styles.menuText}>Manage Users (Dev)</Text>
-                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.logoutContainer}>

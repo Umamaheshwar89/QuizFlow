@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { doc, updateDoc, increment, setDoc } from 'firebase/firestore';
+import { doc, updateDoc, increment, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../services/firebaseConfig';
+import { calculateLevel } from '../../utils/leveling';
 import { useAuth } from '../../context/AuthContext';
 import UIButton from '../../components/UIButton';
 import { Trophy, Home } from 'lucide-react-native';
@@ -33,16 +34,28 @@ export default function ResultScreen() {
 
     const updateStats = async () => {
         try {
-
-            // Dynamic import to match existing pattern or just standard import modification
-            // Actually the imports are at top level in this file.
-
             const isDaily = params.isDaily === 'true';
-
             const userRef = doc(db, 'users', user!.uid);
+
+            // Fetch current data first to calculate level correctly
+            const userDoc = await getDoc(userRef);
+
+            if (!userDoc.exists()) {
+                console.error("User doc not found");
+                return;
+            }
+
+            const currentData = userDoc.data();
+            const currentXP = currentData.xp || 0;
+            const currentLevel = currentData.level || 1;
+
+            const newXP = currentXP + xp;
+            const newLevel = calculateLevel(newXP);
+
             const updates: any = {
-                xp: increment(xp),
-                quizAttempts: increment(1), // Updated to match schema from quizzesTaken
+                xp: newXP, // Set explicit new value
+                level: newLevel,
+                quizAttempts: increment(1),
                 lastActiveAt: new Date().toISOString()
             };
 
@@ -51,6 +64,13 @@ export default function ResultScreen() {
             }
 
             await setDoc(userRef, updates, { merge: true });
+
+            if (newLevel > currentLevel) {
+                // We can show a level up toast or modal here!
+                // For now, let's just log it or maybe the user will see it in profile.
+                // Ideally: showToast('success', `Level Up! You are now Level ${newLevel}!`);
+            }
+
         } catch (e) {
             console.error("Failed to update stats", e);
         }
