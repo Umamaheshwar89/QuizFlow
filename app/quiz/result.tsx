@@ -22,8 +22,11 @@ export default function ResultScreen() {
     const xp = Number(params.xp);
     const percentage = (score / total) * 100;
 
+    const hasUpdated = React.useRef(false);
+
     useEffect(() => {
-        if (user) {
+        if (user && !hasUpdated.current) {
+            hasUpdated.current = true;
             updateStats();
         }
     }, [user]);

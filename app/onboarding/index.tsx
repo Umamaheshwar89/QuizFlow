@@ -6,6 +6,8 @@ import { StatusBar } from 'expo-status-bar';
 import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ArrowRight, Check } from 'lucide-react-native';
+import { doc, setDoc } from 'firebase/firestore';
+import { db, auth } from '../../services/firebaseConfig';
 
 const { width } = Dimensions.get('window');
 
@@ -47,14 +49,30 @@ export default function Onboarding() {
         if (currentIndex < SLIDES.length - 1) {
             // Scroll to next slide logic would go here if we had a ref
         } else {
-            await AsyncStorage.setItem('hasLaunched', 'true');
-            router.replace('/(auth)/login');
+            await completeOnboarding();
         }
     };
 
     const handleSkip = async () => {
-        await AsyncStorage.setItem('hasLaunched', 'true');
-        router.replace('/(auth)/login');
+        await completeOnboarding();
+    };
+
+    const completeOnboarding = async () => {
+        try {
+            if (auth.currentUser) {
+                await setDoc(doc(db, 'users', auth.currentUser.uid), {
+                    hasOnboarded: true
+                }, { merge: true });
+            }
+            // Keep AsyncStorage as a backup or for checking first launch if needed, 
+            // but relying on user profile is better for this feature request.
+            await AsyncStorage.setItem('hasLaunched', 'true');
+            router.replace('/(tabs)/home');
+        } catch (error) {
+            console.error("Error saving onboarding status:", error);
+            // Fallback
+            router.replace('/(tabs)/home');
+        }
     };
 
     return (
@@ -103,13 +121,13 @@ export default function Onboarding() {
                             <TouchableOpacity onPress={handleSkip}>
                                 <Text style={styles.skipText}>Skip</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 style={[styles.button, styles.nextButton]}
                                 disabled // We rely on swipe for now or add ref later
                             >
                                 <Text style={styles.buttonText}>Swipe</Text>
                                 <ArrowRight size={20} color="white" />
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </>
                     ) : (
                         <TouchableOpacity style={[styles.button, styles.getStartedButton]} onPress={handleNext}>

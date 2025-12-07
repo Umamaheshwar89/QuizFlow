@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, RefreshControl, TouchableOpacity } from 'react-native';
+import UserDetailDrawer from '../../components/UserDetailDrawer';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { db } from '../../services/firebaseConfig';
 import { Trophy, Medal } from 'lucide-react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useAuth } from '../../context/AuthContext';
+import CustomLoader from '../../components/CustomLoader';
+
+import { useUserProfile } from '../../hooks/useUserProfile';
 
 interface UserRank {
     id: string;
     displayName: string;
     xp: number;
+    photoURL?: string;
 }
 
 export default function Leaderboard() {
@@ -18,7 +23,7 @@ export default function Leaderboard() {
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const { user } = useAuth()
-    console.log(user)
+    const { profile } = useUserProfile();
 
     const fetchLeaderboard = async () => {
         try {
@@ -33,7 +38,8 @@ export default function Leaderboard() {
                 ranks.push({
                     id: doc.id,
                     displayName: nameToDisplay,
-                    xp: data.xp || 0
+                    xp: data.xp || 0,
+                    photoURL: data.photoURL
                 });
             });
             setUsers(ranks);
@@ -49,6 +55,8 @@ export default function Leaderboard() {
         fetchLeaderboard();
     }, []);
 
+    const [selectedUser, setSelectedUser] = useState<UserRank | null>(null);
+
     const onRefresh = () => {
         setRefreshing(true);
         fetchLeaderboard();
@@ -62,19 +70,52 @@ export default function Leaderboard() {
         else if (index === 2) { icon = <Medal color="#CD7F32" size={24} />; color = '#FFE0B2'; }
         else { icon = <Text style={styles.rankText}>{index + 1}</Text>; color = 'white'; }
 
+        // Use local profile data if it's the current user to ensure instant updates
+        const isCurrentUser = item.id === user?.uid;
+        const displayItem = isCurrentUser && profile ? {
+            ...item,
+            displayName: profile.displayName || item.displayName,
+            photoURL: profile.photoURL || item.photoURL,
+            xp: profile.xp // Also update XP if it changes locally? Maybe safer to stick to name/photo for now, but XP likely syncs well.
+        } : item;
+
         return (
-            <Animated.View entering={FadeInDown.delay(index * 50)} style={[styles.rankItem, { backgroundColor: color }]}>
-                <View style={styles.leftSection}>
-                    <View style={styles.rankIcon}>{icon}</View>
-                    <View style={styles.avatar}>
-                        <Text style={styles.avatarText}>{item.displayName[0]}</Text>
+            <Animated.View entering={FadeInDown.delay(index * 50)}>
+                <TouchableOpacity
+                    activeOpacity={0.9}
+                    onPress={() => setSelectedUser(displayItem)}
+                    style={[styles.rankItem, { backgroundColor: color }]}
+                >
+                    <View style={styles.leftSection}>
+                        <View style={styles.rankIcon}>{icon}</View>
+                        <View style={styles.avatar}>
+                            {displayItem.photoURL ? (
+                                <Image
+                                    source={{ uri: displayItem.photoURL }}
+                                    style={{ width: 40, height: 40, borderRadius: 20 }}
+                                />
+                            ) : (
+                                <Text style={styles.avatarText}>{displayItem.displayName[0]}</Text>
+                            )}
+                        </View>
+                        <Text style={styles.name}>{displayItem.displayName} {isCurrentUser && '(You)'}</Text>
                     </View>
-                    <Text style={styles.name}>{item.displayName} {item.id === user?.uid && '(You)'}</Text>
-                </View>
-                <Text style={styles.xp}>{item.xp} XP</Text>
+                    <Text style={styles.xp}>{displayItem.xp} XP</Text>
+                </TouchableOpacity>
             </Animated.View>
         );
     };
+
+    if (loading && !refreshing) {
+        return (
+            <SafeAreaView style={[styles.container, styles.loadingContainer]}>
+                <View style={styles.header}>
+                    <Text style={styles.title}>Leaderboard</Text>
+                </View>
+                <CustomLoader text="Loading ranks..." />
+            </SafeAreaView>
+        );
+    }
 
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
@@ -88,6 +129,12 @@ export default function Leaderboard() {
                 contentContainerStyle={styles.listContent}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 showsVerticalScrollIndicator={false}
+            />
+
+            <UserDetailDrawer
+                visible={!!selectedUser}
+                user={selectedUser}
+                onClose={() => setSelectedUser(null)}
             />
         </SafeAreaView>
     );
@@ -162,4 +209,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#4c669f',
     },
+    loadingContainer: {
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    }
 });

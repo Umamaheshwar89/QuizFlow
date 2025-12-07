@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, TouchableOpacity, StyleSheet, ActivityIndicator, ViewStyle, StyleProp } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { LucideIcon } from 'lucide-react-native';
+import CustomLoader from './CustomLoader';
 
 interface UIButtonProps {
     title: string;
@@ -56,7 +57,7 @@ export default function UIButton({
                 style={[styles.container, styles.outline, animatedStyle, style]}
             >
                 {loading ? (
-                    <ActivityIndicator color="#4c669f" />
+                    <CustomLoader size={24} color="#4c669f" />
                 ) : (
                     <>
                         {Icon && <Icon size={20} color="#4c669f" style={{ marginRight: 8 }} />}
@@ -82,7 +83,7 @@ export default function UIButton({
                 end={{ x: 1, y: 0 }}
             >
                 {loading ? (
-                    <ActivityIndicator color="white" />
+                    <CustomLoader size={24} color="white" />
                 ) : (
                     <>
                         {Icon && <Icon size={20} color="white" style={{ marginRight: 8 }} />}

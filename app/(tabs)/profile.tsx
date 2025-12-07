@@ -5,33 +5,23 @@ import { useAuth } from '../../context/AuthContext';
 import { useUserProfile } from '../../hooks/useUserProfile';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../services/firebaseConfig';
-import { Settings, BarChart2, Award } from 'lucide-react-native';
+import { Settings, BarChart2, Award, Users } from 'lucide-react-native';
 import UIButton from '../../components/UIButton';
 import { useRouter } from 'expo-router';
-import CustomModal from '../../components/CustomModal';
+import { useToast } from '../../context/ToastContext';
 
 export default function Profile() {
     const { user } = useAuth();
     const { profile } = useUserProfile();
     const router = useRouter();
-    const [modalVisible, setModalVisible] = React.useState(false);
-    const [modalConfig, setModalConfig] = React.useState<{ type: 'success' | 'error' | 'info', title: string, message: string }>({
-        type: 'info',
-        title: '',
-        message: ''
-    });
-
-    const showModal = (type: 'success' | 'error' | 'info', title: string, message: string) => {
-        setModalConfig({ type, title, message });
-        setModalVisible(true);
-    };
+    const { showToast } = useToast();
 
     const handleLogout = async () => {
         try {
             await signOut(auth);
-            await signOut(auth);
+            // signOut(auth); // Double call? Removing one.
         } catch (error: any) {
-            showModal('error', 'Error', 'Failed to logout');
+            showToast('error', 'Failed to logout');
         }
     };
 
@@ -87,6 +77,10 @@ export default function Profile() {
                         <Settings size={24} color="#333" />
                         <Text style={styles.menuText}>Settings</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/admin/users')}>
+                        <Users size={24} color="#333" />
+                        <Text style={styles.menuText}>Manage Users (Dev)</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.logoutContainer}>
@@ -94,13 +88,6 @@ export default function Profile() {
                     <UIButton title="Logout" onPress={handleLogout} variant="outline" colors={['#fff', '#fff']} />
                 </View>
             </ScrollView>
-            <CustomModal
-                visible={modalVisible}
-                type={modalConfig.type}
-                title={modalConfig.title}
-                message={modalConfig.message}
-                onClose={() => setModalVisible(false)}
-            />
         </SafeAreaView >
     );
 }

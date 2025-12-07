@@ -86,8 +86,6 @@ export default function Home() {
         );
     }
 
-    // ... (rest of render)
-
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
             <ScrollView
@@ -110,14 +108,16 @@ export default function Home() {
                         <Text style={styles.greeting}>Hello,</Text>
                         <Text style={styles.username}>{profile?.displayName || user?.displayName || user?.email?.split('@')[0] || 'Learner'}</Text>
                     </View>
-                    <Link href={"/profile"} style={styles.avatarContainer}>
-                        {
-                            profile?.photoURL ?
-                                <Image source={{ uri: profile?.photoURL }} style={styles.avatar} />
-                                :
-                                <Text style={styles.avatarText}>{profile?.displayName?.[0] || user?.displayName?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}
-                                </Text>
-                        }
+                    <Link href={"/profile"}>
+                        <View style={styles.avatarContainer}>
+                            {
+                                profile?.photoURL ?
+                                    <Image source={{ uri: profile?.photoURL }} style={styles.avatar} />
+                                    :
+                                    <Text style={styles.avatarText}>{profile?.displayName?.[0] || user?.displayName?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}
+                                    </Text>
+                            }
+                        </View>
                     </Link>
                 </Animated.View>
 

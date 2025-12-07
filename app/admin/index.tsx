@@ -8,22 +8,14 @@ import UIButton from '../../components/UIButton';
 import { seedDatabase } from '../../utils/seedFirestore';
 import { LinearGradient } from 'expo-linear-gradient';
 import CustomModal from '../../components/CustomModal';
+import { useToast } from '../../context/ToastContext';
+import { getFriendlyErrorMessage } from '../../utils/firebaseErrors';
 
 export default function AdminPanel() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState<string>('Ready');
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalConfig, setModalConfig] = useState<{ type: 'success' | 'error' | 'info', title: string, message: string }>({
-        type: 'info',
-        title: '',
-        message: ''
-    });
-
-    const showModal = (type: 'success' | 'error' | 'info', title: string, message: string) => {
-        setModalConfig({ type, title, message });
-        setModalVisible(true);
-    };
+    const { showToast } = useToast();
 
     const handleSeed = async () => {
         setLoading(true);
@@ -32,15 +24,15 @@ export default function AdminPanel() {
             const success = await seedDatabase();
             if (success) {
                 setStatus('Success! Database populated with test data.');
-                showModal('success', 'Success', 'Database has been seeded.');
+                showToast('success', 'Database has been seeded.');
             } else {
                 setStatus('Failed to seed database. Check logs.');
-                showModal('error', 'Error', 'Seeding failed. See status for details.');
+                showToast('error', 'Seeding failed. See status for details.');
             }
         } catch (error: any) {
             console.error("Seeding error:", error);
             setStatus(`Error: ${error.message || 'Unknown error'}`);
-            showModal('error', 'Seeding Error', error.message || 'Unknown error occurred');
+            showToast('error', getFriendlyErrorMessage(error));
         } finally {
             setLoading(false);
         }
@@ -87,14 +79,6 @@ export default function AdminPanel() {
                 </View>
 
             </ScrollView>
-
-            <CustomModal
-                visible={modalVisible}
-                type={modalConfig.type}
-                title={modalConfig.title}
-                message={modalConfig.message}
-                onClose={() => setModalVisible(false)}
-            />
         </SafeAreaView>
     );
 }

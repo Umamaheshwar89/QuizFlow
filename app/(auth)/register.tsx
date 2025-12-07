@@ -10,29 +10,20 @@ import { auth, db } from '../../services/firebaseConfig';
 import UIButton from '../../components/UIButton';
 import UIInput from '../../components/UIInput';
 import Animated, { FadeInDown } from 'react-native-reanimated';
-import CustomModal from '../../components/CustomModal';
+import { useToast } from '../../context/ToastContext';
+import { getFriendlyErrorMessage } from '../../utils/firebaseErrors';
 
 export default function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalConfig, setModalConfig] = useState<{ type: 'success' | 'error', title: string, message: string }>({
-        type: 'success',
-        title: '',
-        message: ''
-    });
+    const { showToast } = useToast();
     const router = useRouter();
-
-    const showModal = (type: 'success' | 'error', title: string, message: string) => {
-        setModalConfig({ type, title, message });
-        setModalVisible(true);
-    };
 
     const handleRegister = async () => {
         if (!email || !password || !name) {
-            showModal('error', 'Missing Fields', 'Please fill in all fields to create your account.');
+            showToast('error', 'Please fill in all fields to create your account.');
             return;
         }
         setLoading(true);
@@ -47,13 +38,15 @@ export default function Register() {
                 streak: 0,
                 quizAttempts: 0,
                 createdAt: new Date().toISOString(),
-                role: 'user'
+                role: 'user',
+                hasOnboarded: false
             });
+            showToast('success', 'Account created successfully!');
             // AuthContext handles redirect, but we might want to show success first? 
             // Usually AuthContext redirect is fast. Let's just rely on that.
 
         } catch (error: any) {
-            showModal('error', 'Registration Failed', error.message);
+            showToast('error', getFriendlyErrorMessage(error));
         } finally {
             setLoading(false);
         }
@@ -67,13 +60,6 @@ export default function Register() {
     return (
         <LinearGradient colors={['#ffffff', '#f3f4f6']} style={styles.container}>
             <StatusBar style="dark" />
-            <CustomModal
-                visible={modalVisible}
-                type={modalConfig.type}
-                title={modalConfig.title}
-                message={modalConfig.message}
-                onClose={() => setModalVisible(false)}
-            />
 
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
                 <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>

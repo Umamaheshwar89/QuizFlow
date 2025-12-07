@@ -17,6 +17,7 @@ export interface UserProfile {
     accuracy: number;
     joinedAt: string;
     photoURL?: string;
+    hasOnboarded?: boolean;
 }
 
 export function useUserProfile() {
@@ -40,7 +41,8 @@ export function useUserProfile() {
                     displayName: data.displayName || user.displayName || undefined,
                     photoURL: data.photoURL || user.photoURL || undefined,
                     // Map createdAt to joinedAt if joinedAt is missing
-                    joinedAt: data.joinedAt || (data as any).createdAt || new Date().toISOString()
+                    joinedAt: data.joinedAt || (data as any).createdAt || new Date().toISOString(),
+                    hasOnboarded: data.hasOnboarded
                 });
             } else {
                 // If user document doesn't exist, strictly logout as per requirement

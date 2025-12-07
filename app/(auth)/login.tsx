@@ -12,31 +12,20 @@ import UIInput from '../../components/UIInput';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import CustomModal from '../../components/CustomModal';
-
-WebBrowser.maybeCompleteAuthSession();
+import { useToast } from '../../context/ToastContext';
+import { getFriendlyErrorMessage } from '../../utils/firebaseErrors';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalConfig, setModalConfig] = useState<{ type: 'success' | 'error', title: string, message: string }>({
-        type: 'success',
-        title: '',
-        message: ''
-    });
+    const { showToast } = useToast();
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         webClientId: '769611697598-oiattim9t34gonr6p9e10360r4c6e8vn.apps.googleusercontent.com',
         iosClientId: '769611697598-oiattim9t34gonr6p9e10360r4c6e8vn.apps.googleusercontent.com',
         androidClientId: '769611697598-oiattim9t34gonr6p9e10360r4c6e8vn.apps.googleusercontent.com',
     });
-
-    const showModal = (type: 'success' | 'error', title: string, message: string) => {
-        setModalConfig({ type, title, message });
-        setModalVisible(true);
-    };
 
     useEffect(() => {
         if (response?.type === 'success') {
@@ -61,9 +50,10 @@ export default function Login() {
                             role: 'user'
                         });
                     }
+                    showToast('success', 'Logged in successfully!');
                 })
                 .catch((error) => {
-                    showModal('error', 'Google Auth Error', error.message);
+                    showToast('error', getFriendlyErrorMessage(error));
                 })
                 .finally(() => setLoading(false));
         }
@@ -71,14 +61,15 @@ export default function Login() {
 
     const handleLogin = async () => {
         if (!email || !password) {
-            showModal('error', 'Missing Fields', 'Please fill in all fields to continue.');
+            showToast('error', 'Please fill in all fields to continue.');
             return;
         }
         setLoading(true);
         try {
             await signInWithEmailAndPassword(auth, email, password);
+            showToast('success', 'Welcome back!');
         } catch (error: any) {
-            showModal('error', 'Login Failed', error.message);
+            showToast('error', getFriendlyErrorMessage(error));
         } finally {
             setLoading(false);
         }
@@ -92,13 +83,6 @@ export default function Login() {
     return (
         <LinearGradient colors={['#ffffff', '#f3f4f6']} style={styles.container}>
             <StatusBar style="dark" />
-            <CustomModal
-                visible={modalVisible}
-                type={modalConfig.type}
-                title={modalConfig.title}
-                message={modalConfig.message}
-                onClose={() => setModalVisible(false)}
-            />
 
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
                 <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -129,7 +113,11 @@ export default function Login() {
                         />
 
                         <View style={styles.forgotContainer}>
-                            <Text style={styles.forgotText}>Forgot Password?</Text>
+                            <Link href="/(auth)/forgot-password" asChild>
+                                <TouchableOpacity>
+                                    <Text style={styles.forgotText}>Forgot Password?</Text>
+                                </TouchableOpacity>
+                            </Link>
                         </View>
 
                         <UIButton

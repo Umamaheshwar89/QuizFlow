@@ -13,8 +13,9 @@ import { auth, db } from '../../services/firebaseConfig';
 import { getStorage } from 'firebase/storage';
 import UIButton from '../../components/UIButton';
 import { useUserProfile } from '../../hooks/useUserProfile';
-import CustomModal from '../../components/CustomModal';
+import { useToast } from '../../context/ToastContext';
 import CustomLoader from '../../components/CustomLoader';
+import { getFriendlyErrorMessage } from '../../utils/firebaseErrors';
 
 export default function EditProfile() {
     const router = useRouter();
@@ -22,17 +23,7 @@ export default function EditProfile() {
     const [name, setName] = useState('');
     const [image, setImage] = useState<string | null>(null);
     const [saving, setSaving] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalConfig, setModalConfig] = useState<{ type: 'success' | 'error' | 'info', title: string, message: string }>({
-        type: 'info',
-        title: '',
-        message: ''
-    });
-
-    const showModal = (type: 'success' | 'error' | 'info', title: string, message: string) => {
-        setModalConfig({ type, title, message });
-        setModalVisible(true);
-    };
+    const { showToast } = useToast();
 
     // Initialize state when profile loads
     useEffect(() => {
@@ -78,6 +69,7 @@ export default function EditProfile() {
                     console.error("Storage upload failed (maybe bucket not configured?):", storageError);
                     // Fallback: Just keep local uri for session or alert
                     // Alert.alert("Upload Failed", "Could not upload image to cloud. Saving text changes only.");
+                    showToast('error', "Could not upload image to cloud. Saving other changes.");
                 }
             }
 
@@ -91,13 +83,13 @@ export default function EditProfile() {
             const userRef = doc(db, 'users', auth.currentUser.uid);
             await updateDoc(userRef, {
                 displayName: name,
-                // photoURL: photoURL // Un-comment if we add this to schema
+                photoURL: photoURL
             });
 
-            showModal('success', 'Success', 'Profile updated successfully');
+            showToast('success', 'Profile updated successfully');
             router.back();
         } catch (error: any) {
-            showModal('error', 'Error', error.message);
+            showToast('error', getFriendlyErrorMessage(error));
         } finally {
             setSaving(false);
         }
@@ -215,19 +207,6 @@ export default function EditProfile() {
                 />
 
             </ScrollView>
-
-            <CustomModal
-                visible={modalVisible}
-                type={modalConfig.type}
-                title={modalConfig.title}
-                message={modalConfig.message}
-                onClose={() => {
-                    setModalVisible(false);
-                    if (modalConfig.type === 'success') {
-                        router.back();
-                    }
-                }}
-            />
         </SafeAreaView>
     );
 }
