@@ -16,21 +16,21 @@ const SLIDES = [
         id: '1',
         title: 'Master Your Skills',
         description: 'Practice thousands of MCQs across various topics and difficulty levels.',
-        image: require('../../assets/adaptive-icon.png'), // Placeholder, using app icon for now
+        image: require('../../assets/adaptive_icon.png'), // Placeholder, using app icon for now
         color: '#4c669f'
     },
     {
         id: '2',
         title: 'Track Progress',
         description: 'Visualize your improvement with detailed analytics and performance insights.',
-        image: require('../../assets/adaptive-icon.png'),
+        image: require('../../assets/adaptive_icon.png'),
         color: '#3b5998'
     },
     {
         id: '3',
         title: 'Complete Quizzes',
         description: 'Challenge yourself with timed quizzes and climb the global leaderboard.',
-        image: require('../../assets/adaptive-icon.png'),
+        image: require('../../assets/adaptive_icon.png'),
         color: '#192f6a'
     }
 ];

@@ -35,9 +35,6 @@
     "extra": {
       "router": {
         "origin": false
-      },
-      "eas": {
-        "projectId": "312357bb-dcf2-4697-a869-f2cf73f4721f"
       }
     },
     "owner": "imtiaz0307"
