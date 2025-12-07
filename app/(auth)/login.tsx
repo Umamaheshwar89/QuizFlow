@@ -44,6 +44,7 @@ export default function Login() {
                             email: userCredential.user.email,
                             displayName: userCredential.user.displayName || 'User',
                             xp: 0,
+                            level: 1,
                             streak: 0,
                             quizAttempts: 0,
                             createdAt: new Date().toISOString(),
