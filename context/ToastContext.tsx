@@ -41,7 +41,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
 
         timeoutRef.current = setTimeout(() => {
             setToast(null);
-        }, 3000); // Auto hide after 3 seconds
+        }, 3000);
     }, []);
 
     const hideToast = () => {
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 20,
         right: 20,
-        zIndex: 9999, // Ensure it's on top of everything
+        zIndex: 9999,
         alignItems: 'center',
     },
     toast: {

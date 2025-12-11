@@ -10,9 +10,6 @@ import UIButton from '../../components/UIButton';
 import { Trophy, Home } from 'lucide-react-native';
 import Animated, { FadeInUp, ZoomIn } from 'react-native-reanimated';
 
-// Actually I don't have confetti installed. I'll skip it or use a simple lottie if I had it.
-// I'll stick to Reanimated scale animation.
-
 export default function ResultScreen() {
     const params = useLocalSearchParams();
     const router = useRouter();
@@ -37,7 +34,7 @@ export default function ResultScreen() {
             const isDaily = params.isDaily === 'true';
             const userRef = doc(db, 'users', user!.uid);
 
-            // Fetch current data first to calculate level correctly
+
             const userDoc = await getDoc(userRef);
 
             if (!userDoc.exists()) {
@@ -53,7 +50,7 @@ export default function ResultScreen() {
             const newLevel = calculateLevel(newXP);
 
             const updates: any = {
-                xp: newXP, // Set explicit new value
+                xp: newXP,
                 level: newLevel,
                 quizAttempts: increment(1),
                 lastActiveAt: new Date().toISOString()
@@ -66,9 +63,9 @@ export default function ResultScreen() {
             await setDoc(userRef, updates, { merge: true });
 
             if (newLevel > currentLevel) {
-                // We can show a level up toast or modal here!
-                // For now, let's just log it or maybe the user will see it in profile.
-                // Ideally: showToast('success', `Level Up! You are now Level ${newLevel}!`);
+
+
+
             }
 
         } catch (e) {

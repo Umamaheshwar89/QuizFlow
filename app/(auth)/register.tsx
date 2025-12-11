@@ -30,7 +30,6 @@ export default function Register() {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             await updateProfile(userCredential.user, { displayName: name });
-            // Create user profile
             await setDoc(doc(db, "users", userCredential.user.uid), {
                 email: email,
                 displayName: name,
@@ -43,9 +42,6 @@ export default function Register() {
                 hasOnboarded: false
             });
             showToast('success', 'Account created successfully!');
-            // AuthContext handles redirect, but we might want to show success first? 
-            // Usually AuthContext redirect is fast. Let's just rely on that.
-
         } catch (error: any) {
             showToast('error', getFriendlyErrorMessage(error));
         } finally {

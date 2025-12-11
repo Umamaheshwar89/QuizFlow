@@ -21,7 +21,6 @@ export default function UserStats() {
         );
     }
 
-    // Real data from UserProfile
     const totalQuizzes = profile?.quizAttempts || 0;
     const totalXP = profile?.xp || 0;
     const accuracy = profile?.accuracy || 0;

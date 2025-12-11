@@ -28,7 +28,6 @@ export const getFriendlyErrorMessage = (error: any): string => {
         case 'auth/requires-recent-login':
             return 'Please login again to verify your identity before performing this action.';
         default:
-            // If it's a generic Firebase error with a raw message, try to clean it up or just return it if it looks readable
             if (message.includes('Firebase:')) {
                 return 'An authentication error occurred. Please try again.';
             }

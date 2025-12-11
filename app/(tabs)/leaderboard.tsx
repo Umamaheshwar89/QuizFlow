@@ -32,7 +32,6 @@ export default function Leaderboard() {
             const ranks: UserRank[] = [];
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
-                // Check for displayName, then name (seed data), then email part, then fallback
                 const nameToDisplay = data.displayName || data.name || data.email?.split('@')[0] || 'Anonymous';
 
                 ranks.push({
@@ -70,13 +69,11 @@ export default function Leaderboard() {
         else if (index === 2) { icon = <Medal color="#CD7F32" size={24} />; color = '#FFE0B2'; }
         else { icon = <Text style={styles.rankText}>{index + 1}</Text>; color = 'white'; }
 
-        // Use local profile data if it's the current user to ensure instant updates
         const isCurrentUser = item.id === user?.uid;
         const displayItem = isCurrentUser && profile ? {
             ...item,
             displayName: profile.displayName || item.displayName,
             photoURL: profile.photoURL || item.photoURL,
-            xp: profile.xp // Also update XP if it changes locally? Maybe safer to stick to name/photo for now, but XP likely syncs well.
         } : item;
 
         return (

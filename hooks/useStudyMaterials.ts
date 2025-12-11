@@ -7,7 +7,7 @@ export interface StudyMaterial {
     id: string;
     categoryId: string;
     title: string;
-    content: string; // Markdown
+    content: string;
     readTime: string;
 }
 

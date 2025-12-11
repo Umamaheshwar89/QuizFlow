@@ -32,7 +32,6 @@ export function useTopics(categoryId?: string) {
                 collection(db, 'topics'),
                 where('categoryId', '==', categoryId),
                 where('isActive', '==', true)
-                // orderBy('order', 'asc') // Requires index, remove if not indexed yet
             );
 
             const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -40,7 +39,6 @@ export function useTopics(categoryId?: string) {
                 snapshot.forEach((doc) => {
                     results.push({ id: doc.id, ...doc.data() } as Topic);
                 });
-                // Manual sort if index is missing
                 results.sort((a, b) => a.order - b.order);
                 setTopics(results);
                 setLoading(false);

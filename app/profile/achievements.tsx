@@ -27,13 +27,13 @@ interface Badge {
 }
 
 const BadgeItem = React.memo(({ badge, unlocked }: { badge: Badge, unlocked: boolean }) => {
-    // Determine colors based on badgeType or fallback
+
     let colors = ['#e0e0e0', '#bdbdbd'];
     if (unlocked) {
         if (badge.badgeType === 'gold') colors = ['#FFD700', '#FFA500'];
         else if (badge.badgeType === 'silver') colors = ['#C0C0C0', '#E5E4E2'];
         else if (badge.badgeType === 'bronze') colors = ['#CD7F32', '#8B4513'];
-        else colors = ['#845ec2', '#d65db1']; // default purple
+        else colors = ['#845ec2', '#d65db1'];
     }
 
     return (
@@ -81,14 +81,14 @@ export default function Achievements() {
 
     const { achievements, loading: achievementsLoading } = useAchievements();
 
-    // Helper to check unlock status
+
     const isUnlocked = (achievement: any) => {
         if (!profile) return false;
         const { type, count } = achievement.condition;
 
         switch (type) {
             case 'quiz_count':
-            case 'quizzes_taken': // handling flexibility
+            case 'quizzes_taken':
                 return (profile.quizAttempts || 0) >= count;
             case 'streak':
                 return (profile.streak || 0) >= count;

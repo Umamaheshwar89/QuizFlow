@@ -27,7 +27,6 @@ export default function Index() {
                             setNeedsOnboarding(false);
                         }
                     } else {
-                        // User exists in Auth but not in DB? Edge case.
                         setNeedsOnboarding(false);
                     }
                 } catch (e) {

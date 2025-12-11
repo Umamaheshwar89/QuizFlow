@@ -8,7 +8,7 @@ export interface MCQ {
     topicId: string;
     question: string;
     options: string[];
-    correctAnswer: string; // The text of the correct answer
+    correctAnswer: string;
     explanation: string;
     difficulty: string;
 }
@@ -24,12 +24,9 @@ export function useMCQs(topicId?: string) {
             return;
         }
 
-        // If it's the 'daily' special quiz
         if (topicId === 'daily') {
             const q = query(
                 collection(db, 'mcqs'),
-                // where('isActive', '==', true), // Ensure we only get active ones if that field exists
-                // limit(10) // Fetch a pool to randomize from, or just 5
             );
 
             const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -38,7 +35,6 @@ export function useMCQs(topicId?: string) {
                     results.push({ id: doc.id, ...doc.data() } as MCQ);
                 });
 
-                // Shuffle and pick 5
                 const shuffled = results.sort(() => 0.5 - Math.random());
                 setMcqs(shuffled.slice(0, 5));
                 setLoading(false);

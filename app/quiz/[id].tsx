@@ -13,21 +13,21 @@ import CustomLoader from '../../components/CustomLoader';
 import { auth, db } from '../../services/firebaseConfig';
 
 export default function QuizScreen() {
-    const { id } = useLocalSearchParams(); // This is topicId
+    const { id } = useLocalSearchParams();
     const router = useRouter();
     const { mcqs, loading } = useMCQs(id as string);
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
     const [score, setScore] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(300); // Default 5 mins
+    const [timeLeft, setTimeLeft] = useState(300);
     const [isFinished, setIsFinished] = useState(false);
 
-    // Animations
+
     const progress = useSharedValue(0);
 
     useEffect(() => {
-        // Update progress bar
+
         if (mcqs.length > 0) {
             progress.value = withTiming((currentQuestionIndex + 1) / mcqs.length);
         }
@@ -40,7 +40,7 @@ export default function QuizScreen() {
             setTimeLeft((prev) => {
                 if (prev <= 1) {
                     clearInterval(timer);
-                    handleFinish(score); // Auto finish
+                    handleFinish(score);
                     return 0;
                 }
                 return prev - 1;
@@ -54,11 +54,11 @@ export default function QuizScreen() {
     };
 
     const handleNext = () => {
-        // Check answer
+
         let newScore = score;
         const currentQ = mcqs[currentQuestionIndex];
 
-        // Correct answer check
+
         const selectedText = currentQ.options[selectedOption!];
 
         if (selectedText === currentQ.correctAnswer) {
@@ -82,7 +82,7 @@ export default function QuizScreen() {
             try {
                 if (auth.currentUser) {
                     const today = new Date().toISOString().split('T')[0];
-                    // Use setDoc with merge: true for safety
+
                     await setDoc(doc(db, 'users', auth.currentUser.uid), {
                         lastDailyQuizDate: today
                     }, { merge: true });
@@ -103,7 +103,7 @@ export default function QuizScreen() {
         });
     };
 
-    // Derived state / Render Helpers
+
     const formatTime = (seconds: number) => {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 15,
-        borderBottomWidth: 1, // Optional
+        borderBottomWidth: 1,
         borderBottomColor: '#f0f0f0',
     },
     closeButton: {

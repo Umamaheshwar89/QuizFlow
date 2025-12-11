@@ -25,7 +25,6 @@ export default function ForgotPassword() {
             return;
         }
 
-        // Basic email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             showToast('error', 'Please enter a valid email address.');

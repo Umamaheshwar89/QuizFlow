@@ -10,7 +10,6 @@ export interface UserProfile {
     streak: number;
     lastDailyQuizDate?: string;
     role?: 'user' | 'admin';
-    // Rich Schema Fields
     level: number;
     topicsCompleted: number;
     quizAttempts: number;
@@ -37,22 +36,18 @@ export function useUserProfile() {
                 const data = docSnap.data() as UserProfile;
                 setProfile({
                     ...data,
-                    // Fallback to Auth displayName if missing in Firestore
                     displayName: data.displayName || user.displayName || undefined,
                     photoURL: data.photoURL || user.photoURL || undefined,
-                    // Map createdAt to joinedAt if joinedAt is missing
                     joinedAt: data.joinedAt || (data as any).createdAt || new Date().toISOString(),
                     hasOnboarded: data.hasOnboarded
                 });
             } else {
-                // If user document doesn't exist, strictly logout as per requirement
                 auth.signOut();
                 setProfile(null);
             }
             setLoading(false);
         }, (error) => {
             console.error("Error fetching user profile:", error);
-            // Optional: Logout on permission denied or other fatal errors
             if (error.code === 'permission-denied') {
                 auth.signOut();
             }

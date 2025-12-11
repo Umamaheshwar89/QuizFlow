@@ -19,7 +19,6 @@ export default function Profile() {
     const handleLogout = async () => {
         try {
             await signOut(auth);
-            // signOut(auth); // Double call? Removing one.
         } catch (error: any) {
             showToast('error', 'Failed to logout');
         }

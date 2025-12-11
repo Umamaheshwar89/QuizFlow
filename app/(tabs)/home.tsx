@@ -20,8 +20,6 @@ export default function Home() {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        // Simulate a network request or allow hooks to update if they were poll-based.
-        // Since we use onSnapshot, data is already fresh, but this gives the user feedback.
         setTimeout(() => {
             setRefreshing(false);
         }, 1500);
@@ -30,7 +28,6 @@ export default function Home() {
     const [timeToNextDaily, setTimeToNextDaily] = useState<string>('');
     const [isDailyDone, setIsDailyDone] = useState(false);
 
-    // Check Daily Quiz Status
     useEffect(() => {
         if (profile?.lastDailyQuizDate) {
             const today = new Date().toISOString().split('T')[0];
@@ -42,7 +39,6 @@ export default function Home() {
         }
     }, [profile]);
 
-    // Timer Logic
     useEffect(() => {
         if (!isDailyDone) return;
 
@@ -61,7 +57,7 @@ export default function Home() {
             setTimeToNextDaily(`${hours}h ${minutes}m ${seconds}s`);
         };
 
-        updateTimer(); // Initial call
+        updateTimer();
         const interval = setInterval(updateTimer, 1000);
         return () => clearInterval(interval);
     }, [isDailyDone]);
@@ -72,7 +68,6 @@ export default function Home() {
 
     const handleDailyQuiz = () => {
         if (isDailyDone) {
-            // Optional: Show alert
             return;
         }
         router.push({ pathname: '/quiz/daily' });
@@ -95,9 +90,9 @@ export default function Home() {
                     <RefreshControl
                         refreshing={refreshing}
                         onRefresh={onRefresh}
-                        colors={['#845ec2', '#d65db1']} // Android
-                        tintColor="#845ec2" // iOS
-                        title="Reloading..." // iOS
+                        colors={['#845ec2', '#d65db1']}
+                        tintColor="#845ec2"
+                        title="Reloading..."
                         titleColor="#845ec2"
                     />
                 }

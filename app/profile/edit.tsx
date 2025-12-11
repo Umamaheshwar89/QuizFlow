@@ -25,17 +25,17 @@ export default function EditProfile() {
     const [saving, setSaving] = useState(false);
     const { showToast } = useToast();
 
-    // Initialize state when profile loads
+
     useEffect(() => {
         if (profile) {
             setName(profile.displayName || auth.currentUser?.displayName || '');
-            // We don't have a photoURL in our UserProfile interface yet, but let's assume one or use auth
+
             setImage(auth.currentUser?.photoURL || null);
         }
     }, [profile]);
 
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
+
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
@@ -54,10 +54,10 @@ export default function EditProfile() {
         try {
             let photoURL = auth.currentUser.photoURL;
 
-            // Upload Image if changed
+
             if (image && image !== auth.currentUser.photoURL) {
-                // Real implementation requires Firebase Storage bucket to be set up
-                // For this MVP, if storage fails we might just warn or skip.
+
+
                 try {
                     const response = await fetch(image);
                     const blob = await response.blob();
@@ -67,19 +67,19 @@ export default function EditProfile() {
                     photoURL = await getDownloadURL(storageRef);
                 } catch (storageError) {
                     console.error("Storage upload failed (maybe bucket not configured?):", storageError);
-                    // Fallback: Just keep local uri for session or alert
-                    // Alert.alert("Upload Failed", "Could not upload image to cloud. Saving text changes only.");
+
+
                     showToast('error', "Could not upload image to cloud. Saving other changes.");
                 }
             }
 
-            // Update Auth Profile
+
             await updateProfile(auth.currentUser, {
                 displayName: name,
                 photoURL: photoURL
             });
 
-            // Update Firestore Profile
+
             const userRef = doc(db, 'users', auth.currentUser.uid);
             await updateDoc(userRef, {
                 displayName: name,
@@ -99,7 +99,7 @@ export default function EditProfile() {
         if (!dateString) return 'N/A';
         try {
             const date = new Date(dateString);
-            if (isNaN(date.getTime())) return 'N/A'; // Invalid date
+            if (isNaN(date.getTime())) return 'N/A';
             return date.toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'short',

@@ -32,12 +32,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const inAuthGroup = segments[0] === '(auth)';
 
         if (!user && !inAuthGroup) {
-            // Redirect to login if not authenticated and not in auth group
             router.replace('/(auth)/login');
         } else if (user && inAuthGroup) {
-            // Redirect to home if authenticated and in auth group
-            // router.replace('/(tabs)/home'); 
-            // Changed to index to let index decide or fallback
             router.replace('/');
         }
     }, [user, loading, segments]);

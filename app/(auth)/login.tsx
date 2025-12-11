@@ -10,7 +10,6 @@ import { auth, db } from '../../services/firebaseConfig';
 import UIButton from '../../components/UIButton';
 import UIInput from '../../components/UIInput';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { useToast } from '../../context/ToastContext';
 import { getFriendlyErrorMessage } from '../../utils/firebaseErrors';
@@ -34,12 +33,10 @@ export default function Login() {
             setLoading(true);
             signInWithCredential(auth, credential)
                 .then(async (userCredential) => {
-                    // Check if user doc exists
                     const userDocRef = doc(db, "users", userCredential.user.uid);
                     const userDoc = await getDoc(userDocRef);
 
                     if (!userDoc.exists()) {
-                        // Create new profile for Google user
                         await setDoc(userDocRef, {
                             email: userCredential.user.email,
                             displayName: userCredential.user.displayName || 'User',

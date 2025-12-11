@@ -23,10 +23,6 @@ const UserDetailDrawer = React.memo(({ visible, user, onClose }: UserDetailProps
 
     useEffect(() => {
         if (visible && user?.id) {
-            // Only set loading if it's not already true (though with state reset it should be)
-            // But we'll keep it simple.
-            // Note: If we reset loading in the 'else', it will be true when we open.
-
             const fetchProfile = async () => {
                 try {
                     const docRef = doc(db, 'users', user.id);
@@ -42,11 +38,11 @@ const UserDetailDrawer = React.memo(({ visible, user, onClose }: UserDetailProps
             };
             fetchProfile();
         } else {
-            // Reset state when drawer is closed
+
             setProfile(null);
             setLoading(true);
         }
-    }, [visible, user?.id]); // Depend on user.id instead of user object to avoid ref churn issues
+    }, [visible, user?.id]);
 
     if (!visible) return null;
 

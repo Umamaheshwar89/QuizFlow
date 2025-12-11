@@ -19,7 +19,6 @@ export default function StudyDetail() {
         if (!id) return;
         const fetchMaterial = async () => {
             try {
-                // Fetch from 'topics' now
                 const docRef = doc(db, 'topics', id as string);
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {

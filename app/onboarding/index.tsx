@@ -16,7 +16,7 @@ const SLIDES = [
         id: '1',
         title: 'Master Your Skills',
         description: 'Practice thousands of MCQs across various topics and difficulty levels.',
-        image: require('../../assets/adaptive_icon.png'), // Placeholder, using app icon for now
+        image: require('../../assets/adaptive_icon.png'),
         color: '#4c669f'
     },
     {
@@ -47,7 +47,7 @@ export default function Onboarding() {
 
     const handleNext = async () => {
         if (currentIndex < SLIDES.length - 1) {
-            // Scroll to next slide logic would go here if we had a ref
+
         } else {
             await completeOnboarding();
         }
@@ -64,13 +64,13 @@ export default function Onboarding() {
                     hasOnboarded: true
                 }, { merge: true });
             }
-            // Keep AsyncStorage as a backup or for checking first launch if needed, 
-            // but relying on user profile is better for this feature request.
+
+
             await AsyncStorage.setItem('hasLaunched', 'true');
             router.replace('/(tabs)/home');
         } catch (error) {
             console.error("Error saving onboarding status:", error);
-            // Fallback
+
             router.replace('/(tabs)/home');
         }
     };
@@ -117,18 +117,9 @@ export default function Onboarding() {
 
                 <View style={styles.buttonContainer}>
                     {currentIndex < SLIDES.length - 1 ? (
-                        <>
-                            <TouchableOpacity onPress={handleSkip}>
-                                <Text style={styles.skipText}>Skip</Text>
-                            </TouchableOpacity>
-                            {/* <TouchableOpacity
-                                style={[styles.button, styles.nextButton]}
-                                disabled // We rely on swipe for now or add ref later
-                            >
-                                <Text style={styles.buttonText}>Swipe</Text>
-                                <ArrowRight size={20} color="white" />
-                            </TouchableOpacity> */}
-                        </>
+                        <TouchableOpacity onPress={handleSkip}>
+                            <Text style={styles.skipText}>Skip</Text>
+                        </TouchableOpacity>
                     ) : (
                         <TouchableOpacity style={[styles.button, styles.getStartedButton]} onPress={handleNext}>
                             <Text style={styles.buttonText}>Get Started</Text>
