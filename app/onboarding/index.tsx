@@ -3,9 +3,7 @@ import { View, Text, StyleSheet, Dimensions, FlatList, TouchableOpacity, Image }
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
-import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
-import { LinearGradient } from 'expo-linear-gradient';
-import { ArrowRight, Check } from 'lucide-react-native';
+import { Check } from 'lucide-react-native';
 import { doc, setDoc } from 'firebase/firestore';
 import { db, auth } from '../../services/firebaseConfig';
 
@@ -16,21 +14,21 @@ const SLIDES = [
         id: '1',
         title: 'Master Your Skills',
         description: 'Practice thousands of MCQs across various topics and difficulty levels.',
-        image: require('../../assets/adaptive_icon.png'),
+        image: require('../../assets/icon.png'),
         color: '#4c669f'
     },
     {
         id: '2',
         title: 'Track Progress',
         description: 'Visualize your improvement with detailed analytics and performance insights.',
-        image: require('../../assets/adaptive_icon.png'),
+        image: require('../../assets/icon.png'),
         color: '#3b5998'
     },
     {
         id: '3',
         title: 'Complete Quizzes',
         description: 'Challenge yourself with timed quizzes and climb the global leaderboard.',
-        image: require('../../assets/adaptive_icon.png'),
+        image: require('../../assets/icon.png'),
         color: '#192f6a'
     }
 ];
