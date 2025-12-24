@@ -62,7 +62,7 @@ export default function Register() {
                 <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
                     <Animated.View entering={FadeInDown.delay(100).duration(400)} style={styles.header}>
                         <View style={styles.logoContainer}>
-                            <Image source={require('../../assets/icon.png')} style={styles.logo} resizeMode="contain" />
+                            <Image source={require('../../assets/icon.jpg')} style={styles.logo} resizeMode="contain" />
                         </View>
                         <Text style={styles.appName}>Quiz Flow</Text>
                         <Text style={styles.title}>Create Account</Text>

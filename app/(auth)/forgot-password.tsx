@@ -55,7 +55,7 @@ export default function ForgotPassword() {
 
                     <Animated.View entering={FadeInUp.delay(100).duration(400)} style={styles.header}>
                         <View style={styles.logoContainer}>
-                            <Image source={require('../../assets/icon.png')} style={styles.logo} resizeMode="contain" />
+                            <Image source={require('../../assets/icon.jpg')} style={styles.logo} resizeMode="contain" />
                         </View>
                         <Text style={styles.title}>Forgot Password?</Text>
                         <Text style={styles.subtitle}>
